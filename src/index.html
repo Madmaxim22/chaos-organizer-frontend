@@ -10,19 +10,79 @@
     <div id="root">
         <header class="header">
             <h1>Chaos Organizer</h1>
-            <p>Упорядочивайте свой хаос: сообщения, файлы, напоминания</p>
         </header>
-        <main class="main">
-            <section class="placeholder">
-                <h2>Добро пожаловать!</h2>
-                <p>Приложение находится в разработке. Скоро здесь появится интерфейс чата.</p>
-                <button id="demo-button">Нажми меня</button>
-                <p id="demo-output"></p>
-            </section>
-        </main>
+        <div class="app-container">
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            <nav class="sidebar" id="sidebar">
+                <h2>Категории</h2>
+                <ul>
+                    <li><a href="#" class="active">Все сообщения</a></li>
+                    <li><a href="#">Изображения</a></li>
+                    <li><a href="#">Видео</a></li>
+                    <li><a href="#">Аудио</a></li>
+                    <li><a href="#">Избранное</a></li>
+                    <li><a href="#">Импорт</a></li>
+                    <li><a href="#">Экспорт</a></li>
+                </ul>
+            </nav>
+            <div class="main-content">
+                <div class="search-container">
+                    <button class="search-toggle" id="searchToggle">
+                        🔍 Поиск и сортировка
+                    </button>
+                    <div class="search-panel" id="searchPanel">
+                        <input type="text" class="search-input" placeholder="Введите текст для поиска...">
+                        <div class="sort-options">
+                            <label><input type="radio" name="sort" checked> Все типы</label>
+                            <label><input type="radio" name="sort"> Текст</label>
+                            <label><input type="radio" name="sort"> Изображения</label>
+                            <label><input type="radio" name="sort"> Видео</label>
+                            <label><input type="radio" name="sort"> Аудио</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="pinned-message hidden"></div>
+                <div class="messages-container">
+                                </div>
+                <div class="send-form">
+                    <div class="form-row">
+                        <textarea class="message-input" placeholder="Введите ваше сообщение..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label class="file-upload">
+                            <input type="file" hidden>
+                            📎 Прикрепить файл
+                        </label>
+                        <button class="send-button">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <footer class="footer">
             <p>&copy; 2025 Chaos Organizer. Все права защищены.</p>
         </footer>
     </div>
+    <script>
+        // Переключение бокового меню
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+        // Переключение панели поиска
+        const searchToggle = document.getElementById('searchToggle');
+        const searchPanel = document.getElementById('searchPanel');
+        searchToggle.addEventListener('click', () => {
+            searchPanel.classList.toggle('open');
+        });
+        // Обработка загрузки файла
+        const fileInput = document.querySelector('.file-upload input');
+        const fileUploadLabel = document.querySelector('.file-upload');
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                fileUploadLabel.textContent = `📎 ${e.target.files[0].name}`;
+            }
+        });
+    </script>
 </body>
 </html>
