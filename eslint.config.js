@@ -17,6 +17,7 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.jest,
+        __API_URL__: 'readonly',
       },
     },
   },
@@ -35,7 +36,10 @@ export default [
     },
   },
   {
-    files: [ '*.config.*' ], // правила для конфигов
+    files: [
+ '*.config.*', 'webpack.*.js'
+], // правила для конфигов и webpack
+    languageOptions: { globals: { ...globals.node } },
     rules: {
       'no-underscore-dangle': [ 'off' ], // двойное подчеркивание перед/после переменной
       'import/no-extraneous-dependencies': 'off', // импорт из дев-зависимостей

@@ -1,7 +1,13 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { InjectManifest } from 'workbox-webpack-plugin';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,12 +19,30 @@ export default {
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
+    // Для GitHub Pages: укажите BASE_PATH=/имя-репозитория/ в .env или в GitHub Actions
+    publicPath: process.env.BASE_PATH || '/',
   },
   plugins: [
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
+    new CopyPlugin({
+      patterns: [
+ {
+ from: path.resolve(__dirname, 'ICONS-LICENSE.md'), to: 'ICONS-LICENSE.md'
+},
+],
+    }),
+    new webpack.DefinePlugin({
+      __API_URL__: JSON.stringify(
+        process.env.API_URL || 'https://chaos-organizer-backend-q24c.onrender.com'
+      ),
+    }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',
       chunkFilename: 'css/[name].[contenthash:8].css',
+    }),
+    new InjectManifest({
+      swSrc: path.resolve(__dirname, 'src', 'sw.js'),
+      swDest: 'sw.js',
     }),
   ],
   module: {

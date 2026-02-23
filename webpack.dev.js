@@ -1,6 +1,11 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,7 +18,17 @@ export default {
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
   },
-  plugins: [ new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html'), }), ],
+  plugins: [
+    new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
+    new CopyPlugin({
+      patterns: [
+ {
+ from: path.resolve(__dirname, 'ICONS-LICENSE.md'), to: 'ICONS-LICENSE.md'
+},
+],
+    }),
+    new webpack.DefinePlugin({ __API_URL__: JSON.stringify(process.env.API_URL), }),
+  ],
   module: {
     rules: [
       {
@@ -48,8 +63,5 @@ export default {
   devServer: {
     port: 5000,
     open: true,
-    host: '0.0.0.0',
-    allowedHosts: 'all',
-    server: 'https',
   },
 };
