@@ -1,5 +1,5 @@
-import './css/style.css';
-import ChaosOrganizerApp from './app.js';
+import '@/css/style.css';
+import ChaosOrganizerApp from '@/app.js';
 
 console.log('Chaos Organizer frontend started');
 

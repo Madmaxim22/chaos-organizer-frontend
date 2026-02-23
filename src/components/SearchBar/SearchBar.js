@@ -1,6 +1,6 @@
 import './SearchBar.css';
-import { FILTER_TO_TYPE, TYPE_LABELS } from '../../constants/searchFilters.js';
-import { CloseUrl } from '../../assets/icons.js';
+import { FILTER_TO_TYPE, TYPE_LABELS } from '@/constants/searchFilters.js';
+import { CloseUrl } from '@/assets/icons.js';
 
 /**
  * Панель поиска с фильтрами по типу контента (текст, изображения, видео, аудио, файлы) и общий поиск по всем типам.

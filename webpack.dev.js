@@ -18,6 +18,7 @@ export default {
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
   },
+  resolve: { alias: { '@': path.resolve(__dirname, 'src'), }, },
   plugins: [
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
     new CopyPlugin({

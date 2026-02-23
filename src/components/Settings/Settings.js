@@ -1,6 +1,6 @@
 import './Settings.css';
-import { SettingsService } from '../../services/SettingsService.js';
-import { CloseUrl } from '../../assets/icons.js';
+import { SettingsService } from '@/services/SettingsService.js';
+import { CloseUrl } from '@/assets/icons.js';
 
 /**
  * Модальное окно настроек: фон, шрифт, размер шрифта, цвет акцентов, цвет и прозрачность сообщений.

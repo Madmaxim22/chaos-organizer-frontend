@@ -1,8 +1,8 @@
-import { escapeHTML } from '../../utils/html.js';
-import { renderFormattedText } from './messageTemplates.js';
-import { decryptText } from '../../services/EncryptionService.js';
-import { showPasswordModal } from '../../utils/passwordModal.js';
-import { LockOffUrl } from '../../assets/icons.js';
+import { escapeHTML } from '@/utils/html.js';
+import { renderFormattedText } from './MessageTemplates.js';
+import { decryptText } from '@/services/EncryptionService.js';
+import { showPasswordModal } from '@/utils/passwordModal.js';
+import { LockOffUrl } from '@/assets/icons.js';
 
 /**
  * Обработчик блока закреплённого сообщения: отображение, расшифровка, прокрутка к сообщению.

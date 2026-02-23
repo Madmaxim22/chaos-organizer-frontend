@@ -1,20 +1,20 @@
 import './InputPanel.css';
-import MediaRecorderService from '../../services/mediaRecorder.js';
-import LocationService from '../../services/LocationService.js';
-import EmojiPickerService from '../../services/EmojiPickerService.js';
-import MessageSendModel from '../../model/MessageSendModel.js';
-import { formatBytes } from '../../utils/format.js';
-import { parseScheduleCommand } from '../../services/ReminderService.js';
-import { encryptText, encryptFile } from '../../services/EncryptionService.js';
-import { showPasswordModal } from '../../utils/passwordModal.js';
-import { showReminderModal } from '../../utils/reminderModal.js';
+import MediaRecorderService from '@/services/mediaRecorder.js';
+import LocationService from '@/services/LocationService.js';
+import EmojiPickerService from '@/services/EmojiPickerService.js';
+import MessageSendModel from '@/model/MessageSendModel.js';
+import { formatBytes } from '@/utils/format.js';
+import { parseScheduleCommand } from '@/services/ReminderService.js';
+import { encryptText, encryptFile } from '@/services/EncryptionService.js';
+import { showPasswordModal } from '@/utils/passwordModal.js';
+import { showReminderModal } from '@/utils/reminderModal.js';
 import CommandPalette from './CommandPalette.js';
 import DropOverlay from './DropOverlay.js';
 import RecordingUI from './RecordingUI.js';
 import {
   FileUrl, AudioUrl, VideoUrl, LockOffUrl, LockOnUrl, CloseUrl, StopUrl, GeoUrl,
   ReminderUrl, SmileUrl,
-} from '../../assets/icons.js';
+} from '@/assets/icons.js';
 
 /**
  * Панель ввода сообщений с поддержкой файлов, записи аудио/видео, Drag & Drop.

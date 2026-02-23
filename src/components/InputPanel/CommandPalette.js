@@ -1,5 +1,5 @@
-import { escapeHTML, escapeAttr } from '../../utils/html.js';
-import { COMMAND_PALETTE_ITEMS } from '../../constants/commandPalette.js';
+import { escapeHTML, escapeAttr } from '@/utils/html.js';
+import { COMMAND_PALETTE_ITEMS } from '@/constants/commandPalette.js';
 
 /** Формат даты/времени в часовом поясе пользователя (HH:MM DD.MM.YYYY). */
 function formatLocalTimeRu(date) {

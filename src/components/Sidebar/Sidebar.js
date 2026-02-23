@@ -2,7 +2,7 @@ import './Sidebar.css';
 import {
   ImgUrl, VideoUrl, AudioUrl, FileUrl, LinkUrl, FavoriteUrl, MessagesUrl,
   ImportUrl, ExportUrl, SettingUrl,
-} from '../../assets/icons.js';
+} from '@/assets/icons.js';
 
 /** Id категорий сайдбара. */
 const CATEGORY_IDS = [

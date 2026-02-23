@@ -16,7 +16,6 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.jest,
         __API_URL__: 'readonly',
       },
     },
@@ -30,7 +29,7 @@ export default [
       semi: [
         'error', 'always'
       ], // точка с запятой, авто
-      'no-unused-vars': 'off', // не испоьзуемые переменные
+      'no-unused-vars': 'off', // не используемые переменные
       'no-console': 'off', // console.log
       'no-var': 'error',
     },

@@ -1,15 +1,15 @@
 import './Message.css';
 import './MessageAttachments.css';
-import { formatBytes } from '../../utils/format.js';
-import { escapeHTML } from '../../utils/html.js';
-import { messageHTML as renderMessageHTML, renderFormattedText } from './messageTemplates.js';
-import { decryptText, decryptFile } from '../../services/EncryptionService.js';
-import { showPasswordModal } from '../../utils/passwordModal.js';
+import { formatBytes } from '@/utils/format.js';
+import { escapeHTML } from '@/utils/html.js';
+import { messageHTML as renderMessageHTML, renderFormattedText } from './MessageTemplates.js';
+import { decryptText, decryptFile } from '@/services/EncryptionService.js';
+import { showPasswordModal } from '@/utils/passwordModal.js';
 import PinnedMessageHandler from './PinnedMessageHandler.js';
 import MessageTextExpand from './MessageTextExpand.js';
 import DecryptedPreviewLoader from './DecryptedPreviewLoader.js';
 import MessageActionsHandler from './MessageActionsHandler.js';
-import { PinUrl, PinnedUrl } from '../../assets/icons.js';
+import { PinUrl, PinnedUrl } from '@/assets/icons.js';
 
 /**
  * Компонент сообщения: оркестрация списка, подгрузка, pin/favorite/delete, вызов шаблонов.
@@ -317,7 +317,9 @@ export default class MessageComponent {
     const messageEl = this.listMessage?.querySelector(`.message[data-id="${message.id}"]`);
     if (!messageEl) return;
     const decrypted = message.encrypted ? this.decryptedMessageContent.get(String(message.id)) : undefined;
-    const msgWithDecrypted = { ...message, _decryptedContent: decrypted };
+    const msgWithDecrypted = {
+      ...message, _decryptedContent: decrypted
+    };
     const htmlString = renderMessageHTML(msgWithDecrypted, this.baseUrl, this.formatters);
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlString.trim();

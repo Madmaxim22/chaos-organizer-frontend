@@ -19,9 +19,9 @@ export default {
     filename: '[name].[contenthash].js',
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
-    // Для GitHub Pages: укажите BASE_PATH=/имя-репозитория/ в .env или в GitHub Actions
     publicPath: process.env.BASE_PATH || '/',
   },
+  resolve: { alias: { '@': path.resolve(__dirname, 'src'), }, },
   plugins: [
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
     new CopyPlugin({

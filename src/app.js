@@ -1,20 +1,15 @@
-import MessageComponent from './components/MessageComponent/MessageComponent.js';
-import InputPanel from './components/InputPanel/InputPanel.js';
-import Sidebar from './components/Sidebar/Sidebar.js';
-import SearchBar from './components/SearchBar/SearchBar.js';
-import Notification from './components/Notification/Notification.js';
-import Settings from './components/Settings/Settings.js';
-import { MessagesManager } from './services/MessagesManager.js';
-import ApiService from './services/api.js';
-import ReminderService from './services/ReminderService.js';
-import { WebSocketService } from './services/WebSocketService.js';
-import { SettingsService } from './services/SettingsService.js';
-
-/** Размер одной страницы сообщений при ленивой подгрузке */
-const PAGE_SIZE = 20;
-
-/** Порог в пикселях от верха контейнера, при достижении которого подгружаем ещё */
-const SCROLL_LOAD_THRESHOLD = 150;
+import MessageComponent from '@/components/MessageComponent/MessageComponent.js';
+import InputPanel from '@/components/InputPanel/InputPanel.js';
+import Sidebar from '@/components/Sidebar/Sidebar.js';
+import SearchBar from '@/components/SearchBar/SearchBar.js';
+import Notification from '@/components/Notification/Notification.js';
+import Settings from '@/components/Settings/Settings.js';
+import { MessagesManager } from '@/services/MessagesManager.js';
+import ApiService from '@/services/Api.js';
+import ReminderService from '@/services/ReminderService.js';
+import { WebSocketService } from '@/services/WebSocketService.js';
+import { SettingsService } from '@/services/SettingsService.js';
+import { PAGE_SIZE, SCROLL_LOAD_THRESHOLD } from '@/constants/pagination.js';
 
 /**
  * Основной класс приложения Chaos Organizer

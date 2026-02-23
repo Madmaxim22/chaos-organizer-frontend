@@ -1,5 +1,5 @@
-import { decryptFile } from '../../services/EncryptionService.js';
-import { getMimeFromExtension } from '../../utils/mime.js';
+import { decryptFile } from '@/services/EncryptionService.js';
+import { getMimeFromExtension } from '@/utils/mime.js';
 
 /**
  * Загрузка и отображение превью расшифрованных вложений; отзыв object URL при перерисовке.

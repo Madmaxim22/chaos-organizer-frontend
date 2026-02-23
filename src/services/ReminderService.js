@@ -2,7 +2,7 @@
  * Сервис напоминаний: запрос разрешения Notification API,
  * планирование показов уведомлений по времени срабатывания.
  */
-import ApiService from './api.js';
+import ApiService from '@/services/Api.js';
 
 const SCHEDULE_REGEX = /@schedule:\s*(\d{1,2}:\d{2})\s+(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(.+)/i;
 

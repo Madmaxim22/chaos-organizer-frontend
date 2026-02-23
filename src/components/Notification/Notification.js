@@ -1,5 +1,5 @@
 import './Notification.css';
-import { CloseUrl } from '../../assets/icons.js';
+import { CloseUrl } from '@/assets/icons.js';
 
 /**
  * Система уведомлений (всплывающие нотификации)

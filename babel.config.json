@@ -1,12 +1,1 @@
-{
-  "presets": [
-    [
-      "@babel/preset-env",
-      {
-        "useBuiltIns": "entry",
-        "corejs": "3.22"
-      }
-    ]
-  ],
-  "sourceMaps": true
-}
+{"presets":["@babel/preset-env"],"sourceMaps":true}

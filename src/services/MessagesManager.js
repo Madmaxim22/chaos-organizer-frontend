@@ -2,9 +2,9 @@
  * Менеджер сообщений для работы с API сообщений
  * Инкапсулирует логику отправки, получения, управления сообщениями
  */
-import ApiService from './api.js';
-import MessageSendModel from '../model/MessageSendModel.js';
-import MessageReceiveModel from '../model/MessageReceiveModel.js';
+import ApiService from '@/services/Api.js';
+import MessageSendModel from '@/model/MessageSendModel.js';
+import MessageReceiveModel from '@/model/MessageReceiveModel.js';
 
 export class MessagesManager {
   /**
