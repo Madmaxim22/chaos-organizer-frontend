@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Документация — Chaos Organizer</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 1rem 2rem; max-width: 900px; margin-left: auto; margin-right: auto; line-height: 1.5; color: #1a1a1a; }
+    h1 { border-bottom: 1px solid #ccc; padding-bottom: 0.3em; }
+    h2 { margin-top: 1.5em; }
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid #ddd; }
+    .tabs button { padding: 0.5rem 1rem; border: none; background: #f0f0f0; cursor: pointer; border-radius: 4px 4px 0 0; }
+    .tabs button.active { background: #fff; border: 1px solid #ddd; border-bottom: 1px solid #fff; margin-bottom: -1px; }
+    .tabs button:hover { background: #e8e8e8; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .docs-content { padding: 0.5rem 0; }
+    .docs-content img { max-width: 100%; height: auto; }
+    .docs-content pre { background: #f5f5f5; padding: 1rem; overflow-x: auto; border-radius: 4px; }
+    .docs-content code { background: #f0f0f0; padding: 0.1em 0.3em; border-radius: 3px; }
+    .docs-content pre code { background: none; padding: 0; }
+    .mermaid { margin: 1rem 0; min-height: 120px; }
+    .loading { color: #666; }
+    .error { color: #c00; }
+    a { color: #0066cc; }
+  </style>
+</head>
+<body>
+  <h1>Chaos Organizer — Документация</h1>
+  <div class="tabs">
+    <button type="button" id="tabReadme" class="active">Инструкция</button>
+    <button type="button" id="tabSchemas">Схемы работы</button>
+  </div>
+  <div id="panelReadme" class="panel active">
+    <div id="readmeContent" class="docs-content loading">Загрузка…</div>
+  </div>
+  <div id="panelSchemas" class="panel">
+    <div id="schemasContent" class="docs-content loading">Загрузка…</div>
+  </div>
+
+  <script>
+    const pathname = window.location.pathname;
+    const base = pathname.split('/').slice(0, -1).join('/') + '/';
+    const readmeUrl = base + 'README.md';
+    const schemasUrl = base + 'SCHEMAS.md';
+
+    function setActiveTab(panelId) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+      document.getElementById(panelId).classList.add('active');
+      document.getElementById('tab' + (panelId === 'panelReadme' ? 'Readme' : 'Schemas')).classList.add('active');
+      if (panelId === 'panelSchemas') runMermaidOnce(document.getElementById('schemasContent'));
+    }
+
+    function replaceMermaidBlocks(container) {
+      if (!container) return;
+      container.querySelectorAll('pre code.language-mermaid').forEach((block) => {
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = block.textContent;
+        block.parentElement.replaceWith(div);
+      });
+    }
+
+    function runMermaidOnce(container) {
+      if (!container || !window.mermaid) return;
+      var nodes = container.querySelectorAll('.mermaid:not([data-rendered])');
+      if (nodes.length === 0) return;
+      mermaid.run({ nodes: nodes }).then(function() {
+        nodes.forEach(function(n) { n.setAttribute('data-rendered', '1'); });
+      }).catch(function(err) {
+        console.warn('Mermaid render error:', err);
+      });
+    }
+
+    function renderMarkdown(htmlContainer, md) {
+      if (!window.marked) {
+        htmlContainer.innerHTML = '<p class="error">Не удалось загрузить отображение Markdown.</p>';
+        return;
+      }
+      const fixed = md.replace(/\]\(screenshots\//g, '](' + base + 'screenshots/');
+      htmlContainer.innerHTML = marked.parse(fixed);
+      htmlContainer.classList.remove('loading');
+    }
+
+    async function loadAndShow(path, containerId, isSchemas) {
+      const container = document.getElementById(containerId);
+      try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error(res.statusText);
+        const text = await res.text();
+        renderMarkdown(container, text);
+        if (isSchemas) {
+          replaceMermaidBlocks(container);
+          if (document.getElementById('panelSchemas').classList.contains('active')) {
+            runMermaidOnce(container);
+          }
+        }
+      } catch (e) {
+        container.innerHTML = '<p class="error">Не удалось загрузить документ: ' + e.message + '</p>';
+        container.classList.remove('loading');
+      }
+    }
+
+    document.getElementById('tabReadme').addEventListener('click', () => setActiveTab('panelReadme'));
+    document.getElementById('tabSchemas').addEventListener('click', () => setActiveTab('panelSchemas'));
+
+    loadAndShow(readmeUrl, 'readmeContent', false);
+    loadAndShow(schemasUrl, 'schemasContent', true);
+
+    if (window.mermaid) {
+      mermaid.initialize({ startOnLoad: false, securityLevel: 'loose' });
+    }
+  </script>
+</body>
+</html>
