@@ -303,7 +303,9 @@ export default class InputPanel {
       });
 
       const receivedMessage = await this.messagesManager.sendMessage(message);
-      this.messageComponent.renderMessage(receivedMessage);
+      if (!this.messageComponent.hasMessage(receivedMessage.id)) {
+        this.messageComponent.renderMessage(receivedMessage);
+      }
       this.notification.info('Успешно', 'Геолокация отправлена');
     } catch (error) {
       this.notification.error('Ошибка геолокации', error.message || 'Не удалось получить местоположение');
@@ -432,10 +434,15 @@ export default class InputPanel {
       if (hasFiles) this.showUploadProgress(0);
       const received = await this.messagesManager.sendMessage(message, { onProgress });
       this.hideUploadProgress();
+      // Не дублируем сообщение, если оно уже пришло по WebSocket (new_message)
       if (received.botReply) {
-        this.messageComponent.renderMessage(received.message);
-        this.messageComponent.renderMessage(received.botReply);
-      } else {
+        if (!this.messageComponent.hasMessage(received.message.id)) {
+          this.messageComponent.renderMessage(received.message);
+        }
+        if (!this.messageComponent.hasMessage(received.botReply.id)) {
+          this.messageComponent.renderMessage(received.botReply);
+        }
+      } else if (!this.messageComponent.hasMessage(received.id)) {
         this.messageComponent.renderMessage(received);
       }
       this.notification.info('Успешно', 'Сообщение отправлено');
