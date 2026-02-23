@@ -10,7 +10,7 @@ console.log('Chaos Organizer frontend started');
 document.addEventListener('DOMContentLoaded', () => {
   // Регистрация Service Worker для офлайн-кеша (Workbox)
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(
+    navigator.serviceWorker.register('./sw.js').then(
       (reg) => console.log('Service Worker зарегистрирован', reg.scope),
       (err) => console.warn('Service Worker не зарегистрирован', err)
     );
