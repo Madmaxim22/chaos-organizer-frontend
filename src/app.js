@@ -9,7 +9,9 @@ import ApiService from '@/services/Api.js';
 import ReminderService from '@/services/ReminderService.js';
 import { WebSocketService } from '@/services/WebSocketService.js';
 import { SettingsService } from '@/services/SettingsService.js';
-import { PAGE_SIZE, SCROLL_LOAD_THRESHOLD } from '@/constants/pagination.js';
+import { LazyMessagesLoader } from '@/services/LazyMessagesLoader.js';
+import { ExportImportService } from '@/services/ExportImportService.js';
+import { PAGE_SIZE } from '@/constants/pagination.js';
 
 /**
  * Основной класс приложения Chaos Organizer
@@ -21,13 +23,6 @@ export default class ChaosOrganizerApp {
    */
   constructor(container) {
     SettingsService.apply();
-    /** Состояние пагинации для ленивой подгрузки */
-    this.currentCategoryId = 'all';
-    this.currentOffset = 0;
-    this.total = 0;
-    this.loadingMore = false;
-    this._scrollListenerBound = null;
-    this._scrollListenerAttached = false;
     this.render();
     this.loadMessages();
     this.reminderService?.init();
@@ -43,6 +38,14 @@ export default class ChaosOrganizerApp {
     this.messagesManager = new MessagesManager();
     this.reminderService = new ReminderService(ApiService, this.notification);
     this.messageComponent = new MessageComponent(this.notification, this.messagesManager);
+    this.exportImportService = new ExportImportService({ messagesManager: this.messagesManager });
+    this.lazyLoader = new LazyMessagesLoader({
+      fetchPage: (categoryId, limit, offset) =>
+        this.messagesManager.getMessagesByCategory(categoryId, limit, offset),
+      onPrepend: (messages) => this.messageComponent.prependMessages(messages),
+      onError: (err) =>
+        this.notification.warning('Не удалось подгрузить сообщения', err?.message || 'Попробуйте снова.'),
+    });
     this.settings = new Settings(this.notification);
     this.sidebar = new Sidebar(this.notification, this.messagesManager, {
       onCategorySelect: (categoryId) => this.loadMessagesByCategory(categoryId),
@@ -89,14 +92,10 @@ export default class ChaosOrganizerApp {
    */
   async loadMessagesByCategory(categoryId) {
     try {
-      this.currentCategoryId = categoryId;
-      this.currentOffset = 0;
-      this.total = 0;
       const { messages, total, fromCache } = await this.messagesManager.getMessagesByCategory(categoryId, PAGE_SIZE, 0);
-      this.currentOffset = messages.length;
-      this.total = total;
+      this.lazyLoader.setState(categoryId, messages.length, total);
       this.messageComponent.renderMessages(messages);
-      this.attachScrollListener();
+      this.lazyLoader.attach(this.messageComponent?.messagesContainer);
       if (fromCache) {
         this.notification.info('Офлайн', 'Показаны сохранённые сообщения.');
       }
@@ -113,17 +112,13 @@ export default class ChaosOrganizerApp {
    */
   async loadMessages() {
     try {
-      this.currentCategoryId = 'all';
-      this.currentOffset = 0;
-      this.total = 0;
       const { messages, total, fromCache } = await this.messagesManager.getMessages(PAGE_SIZE, 0);
-      this.currentOffset = messages.length;
-      this.total = total;
+      this.lazyLoader.setState('all', messages.length, total);
       this.messageComponent.renderMessages(messages);
       this.sidebar.updateSidebarCounts(messages, {
         total, categoryId: 'all'
       });
-      this.attachScrollListener();
+      this.lazyLoader.attach(this.messageComponent?.messagesContainer);
       if (fromCache) {
         this.notification.info('Офлайн', 'Показаны сохранённые сообщения.');
       }
@@ -135,66 +130,11 @@ export default class ChaosOrganizerApp {
   }
 
   /**
-   * Вешает обработчик скролла на контейнер сообщений для ленивой подгрузки (один раз).
-   */
-  attachScrollListener() {
-    if (!this.messageComponent?.messagesContainer || this._scrollListenerAttached) return;
-    this._scrollListenerBound = () => this.onMessagesScroll();
-    this.messageComponent.messagesContainer.addEventListener('scroll', this._scrollListenerBound, { passive: true });
-    this._scrollListenerAttached = true;
-  }
-
-  /**
-   * Вызывается при скролле контейнера сообщений; подгружает следующую страницу при приближении к верху.
-   */
-  onMessagesScroll() {
-    const container = this.messageComponent?.messagesContainer;
-    if (!container || this.loadingMore || this.currentOffset >= this.total) return;
-    if (container.scrollTop <= SCROLL_LOAD_THRESHOLD) {
-      this.loadMoreMessages();
-    }
-  }
-
-  /**
-   * Подгружает следующую порцию старых сообщений и вставляет её сверху списка.
-   */
-  async loadMoreMessages() {
-    if (this.loadingMore || this.currentOffset >= this.total) return;
-    this.loadingMore = true;
-    try {
-      const { messages, total } = await this.messagesManager.getMessagesByCategory(
-        this.currentCategoryId,
-        PAGE_SIZE,
-        this.currentOffset
-      );
-      this.total = total;
-      if (messages.length > 0) {
-        this.messageComponent.prependMessages(messages);
-        this.currentOffset += messages.length;
-      }
-    } catch (error) {
-      console.error('Ошибка подгрузки сообщений:', error);
-      this.notification.warning('Не удалось подгрузить сообщения', error?.message || 'Попробуйте снова.');
-    } finally {
-      this.loadingMore = false;
-    }
-  }
-
-  /**
    * Экспорт истории чата: скачивает JSON-архив с сервера и сохраняет как файл.
    */
   async exportHistory() {
     try {
-      const blob = await this.messagesManager.exportHistory();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'chaos-organizer-backup.json';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      await this.exportImportService.exportHistory();
       this.notification.success('Экспорт', 'История чата сохранена в файл.');
     } catch (error) {
       console.error('Экспорт истории:', error);
@@ -205,26 +145,15 @@ export default class ChaosOrganizerApp {
   /**
    * Импорт истории чата: открывает выбор файла, отправляет его на сервер и обновляет список.
    */
-  importHistory() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json,application/json';
-    input.style.display = 'none';
-    input.addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      try {
-        await this.messagesManager.importHistory(file);
-        await this.loadMessages();
-        this.notification.success('Импорт', 'История чата восстановлена.');
-      } catch (error) {
-        console.error('Импорт истории:', error);
-        this.notification.warning('Импорт', error?.message || 'Не удалось загрузить архив.');
-      } finally {
-        input.remove();
-      }
-    });
-    document.body.appendChild(input);
-    input.click();
+  async importHistory() {
+    try {
+      const done = await this.exportImportService.importHistory();
+      if (!done) return;
+      await this.loadMessages();
+      this.notification.success('Импорт', 'История чата восстановлена.');
+    } catch (error) {
+      console.error('Импорт истории:', error);
+      this.notification.warning('Импорт', error?.message || 'Не удалось загрузить архив.');
+    }
   }
 }
