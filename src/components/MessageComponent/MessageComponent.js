@@ -78,6 +78,15 @@ export default class MessageComponent {
   }
 
   /**
+   * Проверяет, есть ли сообщение с указанным id в списке (для избежания дубликата при HTTP + WebSocket).
+   * @param {string|number} id - id сообщения
+   * @returns {boolean}
+   */
+  hasMessage(id) {
+    return this.listMessage != null && this.listMessage.querySelector(`.message[data-id="${id}"]`) != null;
+  }
+
+  /**
    * Добавляет одно сообщение в конец списка и прокручивает к нему.
    * @param {Object} message - сообщение (MessageReceiveModel или plain object)
    */

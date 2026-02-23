@@ -173,8 +173,8 @@ export function messageHTML(message, baseUrl, formatters) {
   const safeAuthor = escapeHTML(message.author);
   const pinnedClass = message.pinned ? 'pinned' : '';
   const favoritedClass = message.favorite ? 'favorited' : '';
-  const alignmentClass = message.author === 'Система'
-    ? 'user-message' : 'other-message';
+  const isUserMessage = message.author === 'Система' || message.author === 'Пользователь';
+  const alignmentClass = isUserMessage ? 'user-message' : 'other-message';
 
   const attachmentOptions = message.encrypted ? { isEncrypted: true } : {};
   let attachmentsHTML = '';

@@ -70,7 +70,9 @@ export default class ChaosOrganizerApp {
     this.wsService = new WebSocketService(__API_URL__, {
       onNewMessage: (payload) => {
         if (payload && typeof payload === 'object' && payload.id != null) {
-          this.messageComponent.renderMessage(payload);
+          if (!this.messageComponent.hasMessage(payload.id)) {
+            this.messageComponent.renderMessage(payload);
+          }
         } else {
           this.loadMessages();
         }
