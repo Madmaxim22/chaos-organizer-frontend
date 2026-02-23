@@ -26,8 +26,12 @@ export default {
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'src', 'index.html') }),
     new CopyPlugin({
       patterns: [
-        { from: path.resolve(__dirname, 'ICONS-LICENSE.md'), to: 'ICONS-LICENSE.md' },
-        { from: path.resolve(__dirname, 'docs'), to: 'docs' },
+        {
+ from: path.resolve(__dirname, 'ICONS-LICENSE.md'), to: 'ICONS-LICENSE.md'
+},
+        {
+ from: path.resolve(__dirname, 'docs'), to: 'docs'
+},
       ],
     }),
     new webpack.DefinePlugin({
