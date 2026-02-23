@@ -63,9 +63,27 @@ export default class ChaosOrganizerApp {
     );
 
     this.wsService = new WebSocketService(__API_URL__, {
-      onNewMessage: () => this.loadMessages(),
-      onMessageDeleted: () => this.loadMessages(),
-      onMessageUpdated: () => this.loadMessages(),
+      onNewMessage: (payload) => {
+        if (payload && typeof payload === 'object' && payload.id != null) {
+          this.messageComponent.renderMessage(payload);
+        } else {
+          this.loadMessages();
+        }
+      },
+      onMessageDeleted: (payload) => {
+        if (payload && payload.id != null) {
+          this.messageComponent.removeMessageFromList(payload.id);
+        } else {
+          this.loadMessages();
+        }
+      },
+      onMessageUpdated: (payload) => {
+        if (payload && typeof payload === 'object' && payload.id != null) {
+          this.messageComponent.updateMessageInList(payload);
+        } else {
+          this.loadMessages();
+        }
+      },
     });
     this.wsService.connect();
   }

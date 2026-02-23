@@ -297,17 +297,42 @@ export default class MessageComponent {
     }
   }
 
+  /**
+   * Удаляет сообщение из DOM без запроса к серверу (для синхронизации по WebSocket).
+   * @param {string|number} id - id сообщения
+   */
+  removeMessageFromList(id) {
+    const messageEl = this.listMessage?.querySelector(`.message[data-id="${id}"]`);
+    if (messageEl) messageEl.remove();
+    if (this.pinnedMessageContainer?.dataset?.pinnedId === String(id)) {
+      this.pinnedHandler.clearPinnedMessage();
+    }
+  }
+
+  /**
+   * Обновляет одно сообщение в списке (для синхронизации по WebSocket: pin/favorite и т.д.).
+   * @param {Object} message - полное сообщение с сервера
+   */
+  updateMessageInList(message) {
+    const messageEl = this.listMessage?.querySelector(`.message[data-id="${message.id}"]`);
+    if (!messageEl) return;
+    const decrypted = message.encrypted ? this.decryptedMessageContent.get(String(message.id)) : undefined;
+    const msgWithDecrypted = { ...message, _decryptedContent: decrypted };
+    const htmlString = renderMessageHTML(msgWithDecrypted, this.baseUrl, this.formatters);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlString.trim();
+    const newEl = tempDiv.firstChild;
+    messageEl.replaceWith(newEl);
+    this.bindMessageEvents(newEl, message);
+    if (message.pinned) this.pinnedHandler.updatePinnedMessage(message);
+  }
+
   /** Удаляет сообщение на сервере и удаляет его элемент из DOM. */
   async deleteMessage(id) {
     try {
       await this.messagesManager.deleteMessage(id);
       this.notification.warning('Сообщение удалено', 'Сообщение было удалено из истории.');
-
-      // Найти и удалить элемент сообщения из DOM
-      const messageElement = document.querySelector(`.message[data-id="${id}"]`);
-      if (messageElement) {
-        messageElement.remove();
-      }
+      this.removeMessageFromList(id);
     } catch (error) {
       console.error('Ошибка удаления сообщения:', error);
       this.notification.error('Ошибка удаления', 'Не удалось удалить сообщение на сервере.');
