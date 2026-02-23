@@ -9,8 +9,8 @@ const IMPORT_ACCEPT = '.json,application/json';
 /**
  * @typedef {Object} ExportImportServiceOptions
  * @property {import('@/services/MessagesManager.js').MessagesManager} messagesManager - менеджер сообщений для API
- * @property {function(): Promise<Blob>} [getExportBlob] - функция получения blob экспорта (по умолчанию messagesManager.exportHistory)
- * @property {function(File): Promise<void>} [importFile] - функция импорта файла (по умолчанию messagesManager.importHistory)
+ * @property {function(): Promise<Blob>} [getExportBlob] - функция получения blob экспорта
+ * @property {function(File): Promise<void>} [importFile] - функция импорта файла
  */
 
 export class ExportImportService {

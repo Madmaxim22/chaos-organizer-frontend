@@ -8,7 +8,8 @@ import { PAGE_SIZE, SCROLL_LOAD_THRESHOLD } from '@/constants/pagination.js';
  * @typedef {Object} LazyMessagesLoaderOptions
  * @property {number} [pageSize] - размер страницы (по умолчанию PAGE_SIZE)
  * @property {number} [scrollThreshold] - порог в px от верха для подгрузки (по умолчанию SCROLL_LOAD_THRESHOLD)
- * @property {function(string, number, number): Promise<{ messages: *, total: number }>} fetchPage - загрузка страницы (categoryId, limit, offset)
+ * @property {function(string, number, number):
+ * Promise<{ messages: *, total: number }>} fetchPage - загрузка страницы (categoryId, limit, offset)
  * @property {function(*): void} onPrepend - вставка сообщений сверху списка
  * @property {function(Error): void} [onError] - колбэк при ошибке подгрузки
  */

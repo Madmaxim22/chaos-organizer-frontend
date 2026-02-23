@@ -11,6 +11,7 @@ import { WebSocketService } from '@/services/WebSocketService.js';
 import { SettingsService } from '@/services/SettingsService.js';
 import { LazyMessagesLoader } from '@/services/LazyMessagesLoader.js';
 import { ExportImportService } from '@/services/ExportImportService.js';
+import { init as initEmojiShortcodeResolver } from '@/services/EmojiShortcodeResolver.js';
 import { PAGE_SIZE } from '@/constants/pagination.js';
 
 /**
@@ -24,8 +25,14 @@ export default class ChaosOrganizerApp {
   constructor(container) {
     SettingsService.apply();
     this.render();
-    this.loadMessages();
     this.reminderService?.init();
+    this.loadMessagesAfterEmojiReady();
+  }
+
+  /** Инициализирует кэш shortcode→emoji (emoji-picker-element), затем загружает сообщения. */
+  async loadMessagesAfterEmojiReady() {
+    await initEmojiShortcodeResolver();
+    await this.loadMessages();
   }
 
   /**

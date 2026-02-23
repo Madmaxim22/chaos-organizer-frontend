@@ -15,9 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (err) => console.warn('Service Worker не зарегистрирован', err)
     );
   }
-  if ('indexedDB' in window) {
-    console.log('IndexedDB поддерживается');
-  }
 
   const appContainer = document.getElementById('root');
   try {
