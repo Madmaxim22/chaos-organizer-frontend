@@ -1,4 +1,6 @@
 /* Базовые стили для Chaos Organizer */
+@import url('./common.css');
+
 * {
     margin: 0;
     padding: 0;
@@ -7,14 +9,16 @@
 
 html, body {
     height: 100%;
-    margin: 0;
-    padding: 0;
+}
+
+html {
+    font-size: var(--app-font-size, 1rem);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
+    font-family: var(--app-font);
+    background: var(--app-bg);
+    color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -22,100 +26,34 @@ body {
     padding: 20px;
 }
 
+@media (max-width: 769px) {
+    body {
+        padding: 10px;
+    }
+    .search-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    .sidebar h2 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+}
+
 #root {
     width: 100%;
     height: 100%;
-    background: white;
+    background: var(--app-bg-root);
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-}
-
-.header {
-    background: linear-gradient(90deg, #4f46e5, #7c3aed);
-    color: white;
-    padding: 1rem;
-    text-align: center;
-}
-
-.header h1 {
-    font-size: 1.8rem;
-    margin: 0;
-}
-
-.main {
-    padding: 2rem;
-}
-
-.placeholder {
-    text-align: center;
-    padding: 3rem 1rem;
-}
-
-.placeholder h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #4f46e5;
-}
-
-.placeholder p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: #666;
-}
-
-#demo-button {
-    background: #4f46e5;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-}
-
-#demo-button:hover {
-    background: #4338ca;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
-}
-
-#demo-button:disabled {
-    background: #a5b4fc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-#demo-output {
-    margin-top: 1.5rem;
-    font-size: 1.1rem;
-    color: #10b981;
-    min-height: 1.5em;
-}
-
-.footer {
-    background: #f9fafb;
-    padding: 1.5rem;
-    text-align: center;
-    color: #6b7280;
-    border-top: 1px solid #e5e7eb;
-}
-
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 2rem;
-    }
-    .placeholder h2 {
-        font-size: 1.7rem;
-    }
-    .placeholder p {
-        font-size: 1rem;
-    }
 }
 
 /* Стили для новых компонентов Chaos Organizer */
@@ -123,225 +61,52 @@ body {
     display: flex;
     height: 100%;
 }
-.sidebar {
-    width: 250px;
-    background: #f8fafc;
-    border-right: 1px solid #e2e8f0;
-    padding: 1.5rem;
-    transition: transform 0.3s ease;
-    transform: translateX(-100%);
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    z-index: 1000;
-    overflow-y: auto;
-}
-.sidebar.open {
-    transform: translateX(0);
-}
-.sidebar-toggle {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    z-index: 1001;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-}
-.sidebar h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    color: #1e293b;
-}
-.sidebar ul {
-    list-style: none;
-}
-.sidebar li {
-    margin-bottom: 0.75rem;
-}
-.sidebar a {
-    display: block;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    color: #475569;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-.sidebar a:hover,
-.sidebar a.active {
-    background: #e0e7ff;
-    color: #4f46e5;
-}
-.search-container {
-    margin-bottom: 2rem;
-    position: relative;
-}
-.search-toggle {
-    background: #10b981;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.search-panel {
-    background: white;
-    border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: none;
-}
-.search-panel.open {
-    display: block;
-}
-.search-input {
-    width: 100%;
-    padding: 0.875rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-}
-.sort-options {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-.sort-options label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
+
 .main-content {
     flex: 1;
-    padding: 2rem;
+    padding: calc(1rem * var(--app-spacing-scale, 1));
     display: flex;
     flex-direction: column;
-}
-.pinned-message {
-    background: #fef3c7;
-    border-left: 4px solid #f59e0b;
-    padding: 1.25rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-}
-.pinned-message h3 {
-    color: #92400e;
-    margin-bottom: 0.5rem;
+    background: var(--main-content-bg);
 }
 
-.hidden {
-    display: none !important;
-}
 .messages-container {
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 1.5rem;
+    background: var(--bg-panel);
+    border: 1px solid var(--hover-bg);
+    border-radius: calc(12px * var(--app-spacing-scale, 1));
     overflow-y: auto;
     flex: 1;
-    margin-bottom: 1rem;
+    margin-bottom: calc(0.5rem * var(--app-spacing-scale, 1));
 }
-.message {
-    padding: 1rem;
-    border-bottom: 1px solid #f1f5f9;
-}
-.message:last-child {
-    border-bottom: none;
-}
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-}
-.message-author {
-    font-weight: 600;
-    color: #1e293b;
-}
-.message-time {
-    color: #64748b;
-    font-size: 0.875rem;
-}
-.message-body {
-    color: #334155;
-}
-.send-form {
-    margin-top: auto;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 0;
-}
-.send-form h3 {
-    margin-bottom: 1rem;
-    color: #1e293b;
-}
-.form-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-.message-input {
-    flex: 1;
-    padding: 1rem;
-    border: 1px solid #cbd5e1;
+
+.pinned-message {
+    background: rgba(128, 128, 128, 0.4);
+    border-left: 4px solid var(--warning-color);
+    padding: 0.5rem;
     border-radius: 8px;
-    font-family: inherit;
-    font-size: 1rem;
-    resize: vertical;
-    min-height: 80px;
 }
-.file-upload {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    border: 2px dashed #cbd5e1;
-    border-radius: 8px;
-    cursor: pointer;
-    color: #64748b;
-    transition: border-color 0.2s;
+
+.sticky-message {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  color: var(--text-primary);
+  z-index: var(--z-sticky);
 }
-.file-upload:hover {
-    border-color: #4f46e5;
+
+.app-footer {
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+  text-align: center;
+  flex-shrink: 0;
 }
-.send-button {
-    background: #4f46e5;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+
+.app-footer a {
+  color: inherit;
+  text-decoration: none;
 }
-.send-button:hover {
-    background: #4338ca;
-}
-@media (min-width: 768px) {
-    .sidebar {
-        position: relative;
-        transform: translateX(0);
-        height: auto;
-    }
-    .sidebar-toggle {
-        display: none;
-    }
+
+.app-footer a:hover {
+  text-decoration: underline;
 }

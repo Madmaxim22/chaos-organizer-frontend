@@ -1,0 +1,805 @@
+.input-panel {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--hover-bg);
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.input-panel h3 {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+.send-btn-icon {
+  display: none;
+}
+.send-btn-text {
+  display: inline;
+}
+
+.message-input {
+  flex: 1;
+  padding: 7px 15px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: none;
+  height: 39px;
+}
+
+.emoji-picker-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.emoji-picker-btn .emoji-picker-icon .icon-img {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+  position: relative;
+  top: 3px;
+}
+.emoji-picker-btn:hover {
+  background: var(--bg-light);
+  border-color: var(--primary-color);
+}
+
+.emoji-picker-container {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 0.5rem;
+  z-index: var(--z-sticky);
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: var(--panel-transition);
+}
+
+.emoji-picker-container.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.emoji-picker-container emoji-picker {
+  --num-columns: 8;
+  --border-radius: 8px;
+}
+
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 2px dashed var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: border-color 0.2s;
+}
+
+.file-upload:hover {
+  border-color: var(--primary-color);
+}
+
+/* Прогресс загрузки сообщения с файлами */
+.upload-progress {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg-light);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.upload-progress .upload-progress-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.upload-progress .upload-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--hover-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.upload-progress .upload-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary-color);
+  border-radius: 4px;
+  transition: width 0.15s ease;
+}
+
+.upload-progress .upload-progress-percent {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.attachments-preview {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: var(--bg-light);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.attachment-item:last-child {
+  border-bottom: none;
+}
+
+.attachment-name {
+  flex: 1;
+  margin-left: 0.5rem;
+}
+
+.remove-attachment {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.35rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.remove-attachment:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+.remove-attachment .remove-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.5rem;
+  background: var(--hover-bg);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.recording-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+.recording-timer {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  min-width: 2.5em;
+}
+
+.audio-recording-stop-btn {
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  background: var(--bg-light);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.audio-recording-stop-btn .icon .icon-img {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.audio-recording-stop-btn:hover {
+  background: var(--primary-color);
+}
+.audio-recording-stop-btn:hover .icon .icon-img {
+  filter: brightness(0) invert(1);
+}
+
+.audio-recording-stop-btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.drag-over {
+  border-color: var(--primary-color);
+  background: var(--hover-bg);
+}
+
+/* Бургер-меню */
+.burger-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.burger-button {
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 39px;
+  height: 39px;
+}
+
+.burger-button:hover {
+  background: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.burger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 1rem;
+}
+
+.burger-icon span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+}
+
+.burger-dropdown {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  min-width: 10rem;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: var(--panel-transition);
+}
+
+.burger-dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.burger-item {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.burger-item:hover {
+  background: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.burger-item .icon {
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burger-item .icon .icon-img {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+.burger-item.encrypt-btn.active {
+  background: rgba(0, 123, 255, 0.15);
+  color: var(--primary-color, #007bff);
+}
+
+/* На экранах шире 481px кнопка эмодзи есть отдельно — в бургер-меню не показываем */
+@media (min-width: 482px) {
+  .burger-item.emoji-from-burger-btn {
+    display: none;
+  }
+}
+
+/* Палитра команд (автодополнение после @) */
+.command-palette {
+  display: none;
+  margin-top: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: var(--z-dropdown);
+  max-height: 280px;
+  overflow: hidden;
+  transition: var(--panel-transition);
+}
+
+.command-palette.visible {
+  display: block;
+}
+
+.command-palette-list {
+  overflow-y: auto;
+  max-height: 280px;
+  padding: 4px 0;
+}
+
+.command-palette-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.15s;
+}
+
+.command-palette-item:hover,
+.command-palette-item.selected {
+  background: var(--bg-light, #f1f5f9);
+  color: var(--primary-color, #3b82f6);
+}
+
+.command-palette-value {
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--text-primary, #1e293b);
+}
+
+.command-palette-item:hover .command-palette-value,
+.command-palette-item.selected .command-palette-value {
+  color: inherit;
+}
+
+.command-palette-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #64748b);
+}
+
+.command-palette-item:hover .command-palette-desc,
+.command-palette-item.selected .command-palette-desc {
+  color: inherit;
+  opacity: 0.9;
+}
+
+/* Модальное окно Drag and Drop */
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--panel-transition);
+}
+
+.drop-overlay.drop-overlay-visible {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.drop-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.drop-overlay-box {
+  position: relative;
+  z-index: var(--z-base);
+  min-width: 320px;
+  max-width: 90vw;
+  padding: 2rem 2.5rem;
+  background: var(--bg-panel);
+  border-radius: 16px;
+  border: 3px dashed var(--primary-color, #3b82f6);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.drop-overlay-box:hover,
+.drop-overlay-box.drag-over-box {
+  background: rgba(59, 130, 246, 0.06);
+  border-color: var(--primary-color, #2563eb);
+}
+
+.drop-overlay-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  line-height: 1;
+}
+
+.drop-overlay-icon .icon-img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.drop-overlay-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.drop-overlay-hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #64748b);
+}
+
+/* Модальное окно записи видео (превью текущей записи) */
+.video-recording-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sidebar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: var(--panel-transition);
+}
+
+.video-recording-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.video-recording-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.video-recording-modal-content {
+  position: relative;
+  z-index: var(--z-base);
+  background: var(--bg-panel);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.video-recording-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.video-recording-modal-preview {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-recording-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+.video-recording-modal-preview .video-recording-dot {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  width: 12px;
+  height: 12px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.video-recording-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Стилистика как у кнопки «Скачать»: светлый фон, акцентная рамка и текст, при hover — заливка */
+.video-recording-stop-btn {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-light);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.video-recording-stop-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+.video-recording-stop-btn .icon .icon-img {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+  position: relative;
+  top: 2px;
+}
+.video-recording-stop-btn:hover .icon .icon-img {
+  filter: brightness(0) invert(1);
+}
+
+/* Адаптивность: планшет и узкие экраны (769px включительно, --breakpoint-tablet) */
+@media (max-width: 769px) {
+  .form-row {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .message-input {
+    min-width: 0;
+  }
+  .message-input::placeholder {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+    border-radius: 50%;
+  }
+  .send-btn-text {
+    display: none;
+  }
+  .send-btn-icon {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 8px solid currentColor;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    margin-left: 2px;
+  }
+  .burger-dropdown {
+    max-width: min(90vw, 20rem);
+  }
+  .command-palette {
+    max-height: min(280px, 50vh);
+  }
+  .command-palette-list {
+    max-height: min(280px, 50vh);
+  }
+  .drop-overlay-box {
+    min-width: 0;
+    width: calc(100vw - 2rem);
+    padding: 1.5rem;
+  }
+  .video-recording-modal-content {
+    width: 100%;
+  }
+}
+
+/* Адаптивность: телефоны (--breakpoint-mobile: 480px) — меньше кнопок в ряд */
+@media (max-width: 480px) {
+  .form-row {
+    gap: 0.35rem;
+  }
+  .emoji-picker-btn {
+    display: none;
+  }
+}
+
+/* Модальное окно напоминания (календарь, время, текст) */
+.reminder-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 1;
+}
+
+.reminder-modal {
+  background: var(--bg-panel);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 90vw;
+}
+
+.reminder-modal-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.reminder-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.reminder-modal-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #64748b);
+}
+
+.reminder-modal-label span {
+  font-weight: 500;
+  color: var(--text-primary, #1e293b);
+}
+
+.reminder-modal-date,
+.reminder-modal-time,
+.reminder-modal-text {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-panel);
+}
+
+.reminder-modal-date:focus,
+.reminder-modal-time:focus,
+.reminder-modal-text:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.reminder-modal-text {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.reminder-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.reminder-modal-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-light);
+  background: var(--bg-light);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.reminder-modal-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--border-color);
+}
+
+.reminder-modal-submit.primary-button {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  border-color: var(--primary-color);
+}
+
+.reminder-modal-submit.primary-button:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}

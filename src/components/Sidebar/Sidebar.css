@@ -1,0 +1,196 @@
+.sidebar {
+  width: 250px;
+  background: var(--bg-light);
+  border-right: 1px solid var(--border-color);
+  padding: 1.5rem;
+  transition: transform var(--panel-duration) var(--panel-ease);
+  transform: translateX(-100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: var(--z-overlay);
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: 0 8px 8px 0;
+  width: 28px;
+  height: 48px;
+  cursor: pointer;
+  z-index: var(--z-sidebar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform var(--panel-duration) var(--panel-ease);
+}
+.sidebar-toggle:hover {
+  background: var(--primary-hover);
+}
+.sidebar-toggle-arrow {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 8px solid currentColor;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  margin-left: 4px;
+  transition: transform var(--panel-duration) var(--panel-ease);
+}
+#sidebarContainer:has(.sidebar.open) .sidebar-toggle-arrow {
+  transform: rotate(180deg);
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+.sidebar h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: background 0.2s;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+.sidebar a .category-label {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sidebar a .category-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar a .category-count {
+  flex-shrink: 0;
+  margin-left: auto;
+  background: var(--border-light);
+  color: var(--text-secondary);
+  border-radius: 12px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.sidebar-section {
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-section h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.settings-link {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.settings-link a.settings-link-btn,
+.settings-link .settings-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.settings-link .sidebar-btn-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.export-import {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.export-import button {
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.export-import button .sidebar-btn-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.export-import button:hover {
+  background: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+/* Планшеты и телефоны: контейнер сайдбара не занимает ширину, контент на всю ширину (769 включительно) */
+@media (max-width: 769px) {
+  #sidebarContainer {
+    position: relative;
+    flex: 0 0 0;
+    min-width: 0;
+    overflow: visible;
+  }
+}
+
+/* 769px и выше — десктоп, сайдбар виден */
+@media (min-width: 770px) {
+  .sidebar {
+    position: relative;
+    transform: translateX(0);
+    height: 100%;
+  }
+  .sidebar-toggle {
+    display: none;
+  }
+}

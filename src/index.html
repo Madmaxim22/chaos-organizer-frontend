@@ -1,88 +1,168 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaos Organizer</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chaos Organizer</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
+
 <body>
-    <div id="root">
-        <header class="header">
-            <h1>Chaos Organizer</h1>
-        </header>
-        <div class="app-container">
-            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-            <nav class="sidebar" id="sidebar">
-                <h2>Категории</h2>
-                <ul>
-                    <li><a href="#" class="active">Все сообщения</a></li>
-                    <li><a href="#">Изображения</a></li>
-                    <li><a href="#">Видео</a></li>
-                    <li><a href="#">Аудио</a></li>
-                    <li><a href="#">Избранное</a></li>
-                    <li><a href="#">Импорт</a></li>
-                    <li><a href="#">Экспорт</a></li>
-                </ul>
-            </nav>
-            <div class="main-content">
-                <div class="search-container">
-                    <button class="search-toggle" id="searchToggle">
-                        🔍 Поиск и сортировка
-                    </button>
-                    <div class="search-panel" id="searchPanel">
-                        <input type="text" class="search-input" placeholder="Введите текст для поиска...">
-                        <div class="sort-options">
-                            <label><input type="radio" name="sort" checked> Все типы</label>
-                            <label><input type="radio" name="sort"> Текст</label>
-                            <label><input type="radio" name="sort"> Изображения</label>
-                            <label><input type="radio" name="sort"> Видео</label>
-                            <label><input type="radio" name="sort"> Аудио</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="pinned-message hidden"></div>
-                <div class="messages-container">
-                                </div>
-                <div class="send-form">
-                    <div class="form-row">
-                        <textarea class="message-input" placeholder="Введите ваше сообщение..."></textarea>
-                    </div>
-                    <div class="form-row">
-                        <label class="file-upload">
-                            <input type="file" hidden>
-                            📎 Прикрепить файл
-                        </label>
-                        <button class="send-button">Отправить</button>
-                    </div>
-                </div>
+  <div id="root">
+    <div class="app-container">
+      <div id="sidebarContainer">
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Меню"><span class="sidebar-toggle-arrow" aria-hidden="true"></span></button>
+        <nav class="sidebar" id="sidebar">
+          <h2>Категории</h2>
+          <div class="sidebar-section">
+            <ul id="categoryList"></ul>
+          </div>
+          <div class="sidebar-section">
+            <h3>Управление</h3>
+            <div class="export-import">
+              <button id="exportBtn"><span class="sidebar-btn-icon"></span> Экспорт истории</button>
+              <button id="importBtn"><span class="sidebar-btn-icon"></span> Импорт истории</button>
             </div>
+          </div>
+          <div class="settings-link">
+            <a href="#" id="settingsBtn" class="settings-link-btn"><span class="sidebar-btn-icon"></span> Настройки</a>
+          </div>
+        </nav>
+      </div>
+      <div class="main-content">
+        <div id="searchBarContainer">
+          <div class="search-container">
+            <div class="search-panel" id="searchPanel">
+              <div class="search-input-wrap">
+                <input type="text" class="search-input" placeholder="Введите текст для поиска..." />
+                <button type="button" class="search-clear-btn" aria-label="Очистить поиск" title="Очистить"><span class="icon"></span></button>
+              </div>
+              <div class="filter-options" id="filterOptions">
+                <div class="filter-options-list">
+                <label><input type="checkbox" name="filter" value="text" checked /> Текст</label>
+                <label><input type="checkbox" name="filter" value="link" checked /> Ссылки</label>
+                <label><input type="checkbox" name="filter" value="images" checked /> Изображения</label>
+                <label><input type="checkbox" name="filter" value="videos" checked /> Видео</label>
+                <label><input type="checkbox" name="filter" value="audio" checked /> Аудио</label>
+                <label><input type="checkbox" name="filter" value="files" checked /> Файлы</label>
+                </div>
+              </div>
+              <div class="search-results" id="searchResults" style="display: none">
+                <div class="no-results">Введите запрос для поиска</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <footer class="footer">
-            <p>&copy; 2025 Chaos Organizer. Все права защищены.</p>
-        </footer>
+        <div class="messages-container" id="messagesContainer">
+          <div class="pinned-message sticky-message hidden" id="pinnedMessageContainer">
+          </div>
+          <div class="list-message" id="listMessage">
+          </div>
+        </div>
+        <div id="inputPanelContainer">
+          <div class="input-panel">
+            <div class="form-row">
+              <textarea class="message-input" placeholder="Сообщение..."></textarea>
+              <button type="button" class="emoji-picker-btn" id="emojiPickerBtn" aria-label="Выбрать эмодзи" title="Эмодзи"><span class="emoji-picker-icon"></span></button>
+              <div class="burger-menu">
+                <button class="burger-button" aria-label="Дополнительные действия" title="Дополнительные действия">
+                  <div class="burger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </button>
+                <div class="burger-dropdown">
+                  <button type="button" class="burger-item emoji-from-burger-btn">
+                    <span class="icon"></span>
+                    <span>Эмодзи</span>
+                  </button>
+                  <button class="burger-item attach-file-btn">
+                    <span class="icon icon-file"></span>
+                    <span>Прикрепить файл</span>
+                  </button>
+                  <button class="burger-item record-audio-btn">
+                    <span class="icon icon-audio"></span>
+                    <span>Запись аудио</span>
+                  </button>
+                  <button class="burger-item record-video-btn">
+                    <span class="icon icon-video"></span>
+                    <span class="btn-text">Запись видео</span>
+                  </button>
+                  <button class="burger-item location-btn">
+                    <span class="icon icon-geo"></span>
+                    <span>Геолокация</span>
+                  </button>
+                  <button class="burger-item schedule-btn">
+                    <span class="icon icon-reminder"></span>
+                    <span>Напоминание</span>
+                  </button>
+                  <button class="burger-item encrypt-btn">
+                    <span class="icon icon-encrypt"></span>
+                    <span>Шифровать</span>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="primary-button send-btn" aria-label="Отправить">
+              <span class="send-btn-icon" aria-hidden="true"></span>
+              <span class="send-btn-text">Отправить</span>
+            </button>
+            </div>
+            <div id="emojiPickerContainer" class="emoji-picker-container" aria-hidden="true"></div>
+            <div class="command-palette" id="commandPalette" role="listbox" aria-label="Палитра команд" aria-hidden="true">
+              <div class="command-palette-list"></div>
+            </div>
+            </div>
+            <div class="attachments-preview" id="attachmentsPreview" style="display: none">
+              <div id="attachmentsList"></div>
+            </div>
+            <div class="upload-progress" id="uploadProgressBlock" style="display: none" aria-live="polite">
+              <span class="upload-progress-label">Загрузка…</span>
+              <div class="upload-progress-bar"><div class="upload-progress-fill"></div></div>
+              <span class="upload-progress-percent">0%</span>
+            </div>
+            <div class="recording-indicator" id="audioRecordingIndicator" style="display: none">
+              <div class="recording-dot"></div>
+              <span>Идёт запись аудио...</span>
+              <span class="recording-timer" aria-live="polite">0:00</span>
+              <button type="button" class="audio-recording-stop-btn" title="Остановить запись" aria-label="Остановить запись аудио"><span class="icon"></span></button>
+            </div>
+            <div class="recording-indicator" id="videoRecordingIndicator" style="display: none">
+              <div class="recording-dot"></div>
+              <span>Идёт запись видео... (нажмите для остановки)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+        <footer class="app-footer">Icons: <a href="https://svgicons.com" target="_blank" rel="noopener noreferrer">svgicons.com</a></footer>
     </div>
-    <script>
-        // Переключение бокового меню
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-        // Переключение панели поиска
-        const searchToggle = document.getElementById('searchToggle');
-        const searchPanel = document.getElementById('searchPanel');
-        searchToggle.addEventListener('click', () => {
-            searchPanel.classList.toggle('open');
-        });
-        // Обработка загрузки файла
-        const fileInput = document.querySelector('.file-upload input');
-        const fileUploadLabel = document.querySelector('.file-upload');
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                fileUploadLabel.textContent = `📎 ${e.target.files[0].name}`;
-            }
-        });
-    </script>
+    <div id="notificationContainer" class="notification-container"></div>
+    <!-- Модальное окно записи видео (превью текущей записи) -->
+    <div id="videoRecordingModal" class="video-recording-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="videoRecordingModalTitle">
+      <div class="video-recording-modal-backdrop"></div>
+      <div class="video-recording-modal-content">
+        <h2 id="videoRecordingModalTitle" class="video-recording-modal-title">Идёт запись видео <span class="recording-timer" aria-live="polite">0:00</span></h2>
+        <div class="video-recording-modal-preview">
+          <video id="videoRecordingPreview" class="video-recording-preview" autoplay muted playsinline></video>
+          <div class="video-recording-dot"></div>
+        </div>
+        <div class="video-recording-modal-actions">
+          <button type="button" class="primary-button video-recording-stop-btn"><span class="icon"></span><span class="btn-text">Остановить запись</span></button>
+        </div>
+      </div>
+    </div>
+    <!-- Модальное окно Drag and Drop -->
+    <div id="dropOverlay" class="drop-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dropOverlayTitle">
+      <div class="drop-overlay-backdrop"></div>
+      <div class="drop-overlay-box">
+        <div class="drop-overlay-icon" id="dropOverlayIcon"></div>
+        <h2 id="dropOverlayTitle" class="drop-overlay-title">Перетащите файлы сюда</h2>
+        <p class="drop-overlay-hint">Отпустите файлы в эту область, чтобы прикрепить их к сообщению</p>
+      </div>
+    </div>
+  </div>
+  <!-- Скрипты будут добавлены сборщиком Webpack -->
 </body>
+
 </html>

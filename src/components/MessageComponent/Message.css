@@ -1,0 +1,301 @@
+/* Основные стили сообщений */
+.message {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--message-bg);
+  transition: background 0.2s;
+  position: relative;
+  max-width: 80%;
+  border-radius: 12px;
+}
+.message:hover {
+  background: var(--message-bg-hover);
+}
+
+/* Сообщения пользователя (прижаты к правой стороне) */
+.message.user-message {
+  align-self: flex-end;
+  border-radius: 12px 12px 0 12px;
+}
+.message.user-message:hover {
+  background: var(--message-bg-hover);
+}
+
+/* Сообщения других (прижаты к левой стороне) */
+.message.other-message {
+  align-self: flex-start;
+  border-radius: 12px 12px 12px 0;
+}
+.message.other-message:hover {
+  background: var(--message-bg-hover);
+}
+
+/* Заголовок сообщения */
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.message-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.message-time {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+/* Тело сообщения */
+.message-body {
+  color: var(--text-primary);
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.message-text {
+  margin-bottom: 0.5rem;
+}
+
+/* Превью карты в сообщениях с геолокацией */
+.message-map-preview {
+  margin-top: 0.75rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-light, rgba(0, 0, 0, 0.1));
+  width: 100%;
+  background: var(--bg-light, #f3f4f6);
+}
+.message-map-preview-link {
+  display: block;
+  line-height: 0;
+  width: 100%;
+}
+.message-map-preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+  vertical-align: middle;
+}
+.message-map-preview-caption {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.message-text.truncated {
+  max-height: 6em;
+  overflow: hidden;
+  position: relative;
+}
+.message-text.truncated::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2em;
+  background: linear-gradient(to bottom, transparent, var(--message-bg));
+}
+.message-text.expanded {
+  max-height: none;
+}
+
+/* Единый стиль кнопок в сообщении: закрепить, избранное, удалить, скачать — цвет акцента */
+.message .action-button.pin-btn,
+.message .action-button.favorite-btn,
+.message .action-button.delete-btn,
+.message .attachment-download-btn {
+  background: var(--bg-light);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  color: var(--primary-color);
+  transition: all 0.2s;
+}
+.message .action-button.pin-btn:hover,
+.message .action-button.favorite-btn:hover,
+.message .action-button.delete-btn:hover,
+.message .attachment-download-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+/* Кнопка «Показать полностью» / «Свернуть» — нейтральный стиль */
+.message .text-toggle-btn {
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+.message .text-toggle-btn:hover {
+  background: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+/* Кнопка «Скачать» во вложениях (карточки изображений, видео, аудио) — цвет акцента */
+.message .attachment-card .attachment-download-btn,
+.message .attachment-card:has(video) .attachment-download-btn,
+.message .attachment-card:has(audio) .attachment-download-btn {
+  background: var(--bg-light);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+.message .attachment-card .attachment-download-btn:hover,
+.message .attachment-card:has(video) .attachment-download-btn:hover,
+.message .attachment-card:has(audio) .attachment-download-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+/* Кнопка «Показать полностью» / «Свернуть» — одно место под текстом */
+.message .text-toggle-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Действия с сообщением */
+.message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* Кнопка «Скачать всё» — такой же вид, как у кнопки «Скачать» в карточке вложения */
+.message .action-button.download-all-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 8.5em;
+  padding: 0.625rem;
+  background: var(--bg-light);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.message .action-button.download-all-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+.message .action-button.download-all-btn:disabled {
+  opacity: 0.85;
+}
+
+/* Специальные состояния сообщений */
+.pinned {
+  border-left: 4px solid var(--text-secondary);
+  background: var(--hover-bg);
+}
+.message .action-button .action-icon,
+.message .action-button .delete-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+  display: block;
+}
+
+.message .action-button.delete-btn,
+.message .action-button.download-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.favorited .star .favorite-icon,
+.favorite-btn .star .favorite-icon.is-filled {
+  opacity: 1;
+}
+.favorite-btn .star .favorite-icon:not(.is-filled) {
+  opacity: 0.45;
+}
+.star {
+  color: var(--border-light);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Стилизация элементов внутри сообщения */
+.message code,
+.pinned-message .message-pinned code {
+  background: var(--bg-light);
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.875em;
+}
+.message strong,
+.pinned-message .message-pinned strong {
+  font-weight: 700;
+}
+.message em,
+.pinned-message .message-pinned em {
+  font-style: italic;
+}
+.message del,
+.pinned-message .message-pinned del {
+  text-decoration: line-through;
+}
+
+/* Контейнер сообщений */
+.messages-container .list-message {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* Адаптивность (сообщение). 769px / 480px соответствуют --breakpoint-tablet / --breakpoint-mobile */
+@media (max-width: 769px) {
+  .message {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .message {
+    padding: 0.5rem;
+  }
+  .message-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .message-actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* Зашифрованное сообщение: заглушка и кнопка расшифровки */
+.message-body-encrypted {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.encrypted-placeholder-text {
+  margin: 0;
+  color: var(--text-secondary, #64748b);
+  font-style: italic;
+}
+.message-body-encrypted .decrypt-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.message-body-encrypted .decrypt-btn .decrypt-btn-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  object-fit: contain;
+}
