@@ -11,6 +11,9 @@ import {
 
 const TRUNCATE_LENGTH = 500;
 
+/** Автор сообщений бота — только они отображаются слева (other-message). Остальные — справа (user-message). */
+const BOT_AUTHOR = 'Chaos Bot';
+
 // Преобразует URL в тексте в кликабельные ссылки <a target="_blank">.
 function renderTextWithLinks(text) {
   if (!text) return '';
@@ -173,8 +176,8 @@ export function messageHTML(message, baseUrl, formatters) {
   const safeAuthor = escapeHTML(message.author);
   const pinnedClass = message.pinned ? 'pinned' : '';
   const favoritedClass = message.favorite ? 'favorited' : '';
-  const isUserMessage = message.author === 'Система' || message.author === 'Пользователь';
-  const alignmentClass = isUserMessage ? 'user-message' : 'other-message';
+  const isOtherMessage = String(message.author || '') === BOT_AUTHOR;
+  const alignmentClass = isOtherMessage ? 'other-message' : 'user-message';
 
   const attachmentOptions = message.encrypted ? { isEncrypted: true } : {};
   let attachmentsHTML = '';
