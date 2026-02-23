@@ -188,6 +188,18 @@ export default class Sidebar {
     return counts;
   }
 
+  /**
+   * Обновляет счётчик «Избранное» на дельту (при добавлении/удалении из избранного без перезагрузки списка).
+   * @param {number} delta - +1 (добавлено в избранное) или -1 (убрано из избранного)
+   */
+  updateFavoritesCount(delta) {
+    const cat = this.categories.find((c) => c.id === 'favorites');
+    if (cat) {
+      cat.count = Math.max(0, (cat.count || 0) + delta);
+      this.updateRenderCategoryCounts();
+    }
+  }
+
   /** Перерисовывает список категорий со счётчиками (количество справа от названия). */
   updateRenderCategoryCounts() {
     if (!this.categoryList) return;

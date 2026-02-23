@@ -44,7 +44,14 @@ export default class ChaosOrganizerApp {
     this.notification = new Notification();
     this.messagesManager = new MessagesManager();
     this.reminderService = new ReminderService(ApiService, this.notification);
-    this.messageComponent = new MessageComponent(this.notification, this.messagesManager);
+    this.sidebar = new Sidebar(this.notification, this.messagesManager, {
+      onCategorySelect: (categoryId) => this.loadMessagesByCategory(categoryId),
+      onExport: () => this.exportHistory(),
+      onImport: () => this.importHistory(),
+      onSettings: () => this.settings.open(),
+    });
+    this.messageComponent = new MessageComponent(this.notification, this.messagesManager,
+      { onFavoriteToggle: (delta) => this.sidebar.updateFavoritesCount(delta), });
     this.exportImportService = new ExportImportService({ messagesManager: this.messagesManager });
     this.lazyLoader = new LazyMessagesLoader({
       fetchPage: (categoryId, limit, offset) =>
@@ -54,12 +61,6 @@ export default class ChaosOrganizerApp {
         this.notification.warning('Не удалось подгрузить сообщения', err?.message || 'Попробуйте снова.'),
     });
     this.settings = new Settings(this.notification);
-    this.sidebar = new Sidebar(this.notification, this.messagesManager, {
-      onCategorySelect: (categoryId) => this.loadMessagesByCategory(categoryId),
-      onExport: () => this.exportHistory(),
-      onImport: () => this.importHistory(),
-      onSettings: () => this.settings.open(),
-    });
     this.searchBar = new SearchBar(
       this.notification, this.messagesManager, this.messageComponent
     );

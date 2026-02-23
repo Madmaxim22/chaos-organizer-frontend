@@ -18,8 +18,9 @@ export default class MessageComponent {
   /**
    * @param {Object} notification - Компонент уведомлений
    * @param {Object} messagesManager - Менеджер сообщений
+   * @param {Object} [options={}] - колбеки: onFavoriteToggle(delta) — при изменении избранного (delta: +1 / -1)
    */
-  constructor(notification, messagesManager) {
+  constructor(notification, messagesManager, options = {}) {
     this.baseUrl = __API_URL__;
     this.formatters = {
       escapeHTML,
@@ -32,6 +33,7 @@ export default class MessageComponent {
 
     this.messagesManager = messagesManager;
     this.notification = notification;
+    this.options = options;
     /** Кэш расшифрованного текста по id сообщения (сессия). */
     this.decryptedMessageContent = new Map();
     /** Кэш пароля по id сообщения для скачивания вложений. */
@@ -83,7 +85,9 @@ export default class MessageComponent {
    * @returns {boolean}
    */
   hasMessage(id) {
-    return this.listMessage != null && this.listMessage.querySelector(`.message[data-id="${id}"]`) != null;
+    if (id == null || this.listMessage == null) return false;
+    const sid = String(id);
+    return this.listMessage.querySelector(`.message[data-id="${sid}"]`) != null;
   }
 
   /**
@@ -91,6 +95,7 @@ export default class MessageComponent {
    * @param {Object} message - сообщение (MessageReceiveModel или plain object)
    */
   renderMessage(message) {
+    if (message?.id != null && this.hasMessage(message.id)) return;
     const decrypted = message.encrypted ? this.decryptedMessageContent.get(String(message.id)) : undefined;
     const msgWithDecrypted = {
       ...message, _decryptedContent: decrypted
@@ -300,6 +305,7 @@ export default class MessageComponent {
           btn.setAttribute('aria-label', favorited ? 'Убрать из избранного' : 'Добавить в избранное');
         }
       }
+      this.options.onFavoriteToggle?.(favorited ? 1 : -1);
     } catch (error) {
       console.error('Ошибка добавления в избранное:', error);
       this.notification.error('Ошибка избранного', 'Не удалось изменить статус избранного на сервере.');
